@@ -10,5 +10,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:4200") // Hier kun je meerdere origins toevoegen als nodig.
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // Als voorbeeld
                 .allowCredentials(true);
+
+
+        registry.addMapping("/accounts/**")
+                .allowedOrigins("http://localhost:4200")
+                .allowedMethods("GET", "POST")
+                .allowCredentials(true);
+
     }
 }
