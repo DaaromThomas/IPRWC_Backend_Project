@@ -16,7 +16,7 @@ public class BackendOrder {
         // Default constructor required by JPA
     }
 
-    public BackendOrder(String id, String name, String customer, List<ProductInShoppingCart> products) {
+    public BackendOrder(String id, String name, String customer) {
         this.id = id;
         this.name = name;
         this.customer = customer;

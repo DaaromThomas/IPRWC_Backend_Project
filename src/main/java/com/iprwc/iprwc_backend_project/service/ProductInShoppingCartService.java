@@ -13,6 +13,8 @@ public interface ProductInShoppingCartService
 
     List<ProductInShoppingCart> findAll();
 
+    List<ProductInShoppingCart> findByOrderId(String orderId);
+
     Optional<ProductInShoppingCart> findById(String id);
 
     void delete(ProductInShoppingCart productInShoppingCart);

@@ -27,6 +27,11 @@ public class ProductInShoppingCartImpl implements ProductInShoppingCartService {
     }
 
     @Override
+    public List<ProductInShoppingCart> findByOrderId(String orderId) {
+        return (List<ProductInShoppingCart>) this.productInShoppingCartRepository.findByOrderId(orderId);
+    }
+
+    @Override
     public Optional<ProductInShoppingCart> findById(String id) {
         return this.productInShoppingCartRepository.findById(id);
     }

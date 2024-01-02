@@ -45,9 +45,9 @@ public class ProductController
     }
 
     @PostMapping("/products")
-    public Product saveProduct(@RequestParam String id, @RequestParam String name, @RequestParam Double cost, @RequestParam byte[] imageData)
+    public Product saveProduct(@RequestBody Product product)
     {
-        Product product = new Product(id, name, cost, imageData);
+        System.out.println(product);
         return productService.save(product);
     }
 

@@ -5,6 +5,7 @@ import com.iprwc.iprwc_backend_project.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @RestController
@@ -20,20 +21,51 @@ public class OrderController {
         this.productInShoppingCartController = productInShoppingCartController;
     }
 
-    @PostMapping
-    public ResponseEntity<FrontendOrder> createOrder(@RequestBody FrontendOrder frontendOrder) {
-        System.out.println(frontendOrder.getId() + "\n" + frontendOrder.getCustomer()+ "\n" + Arrays.toString(frontendOrder.getProducts()) + "\n" + frontendOrder.getName());
+    @GetMapping
+    public ResponseEntity<FrontendOrder[]> getOrders(){
+        BackendOrder[] backendOrders = this.orderService.findAll().toArray(new BackendOrder[0]);
+        ArrayList<FrontendOrder> frontendOrders = new ArrayList<>();
 
-        BackendOrder backendOrder = rewriteOrder(frontendOrder);
-        System.out.println(backendOrder.getId());
+        for(BackendOrder backendOrder : backendOrders){
+            FrontendOrder frontendOrder = mapToFrontend(backendOrder);
+            frontendOrders.add(frontendOrder);
+        }
 
-        orderService.save(backendOrder);
-        productInShoppingCartController.saveProducts(backendOrder, frontendOrder);
+        FrontendOrder[] frontendOrderArray = frontendOrders.toArray(new FrontendOrder[0]);
 
-        return ResponseEntity.ok(frontendOrder);
+        return ResponseEntity.ok(frontendOrderArray);
     }
 
-    private BackendOrder rewriteOrder(FrontendOrder frontendOrder) {
-        return new BackendOrder(frontendOrder.getId(), frontendOrder.getName(), frontendOrder.getCustomer(), Arrays.asList(frontendOrder.getProducts()));
+    @PostMapping
+    public ResponseEntity<FrontendOrder> createOrder(@RequestBody FrontendOrder order) {
+        System.out.println("Frontend Order: " + order); // Print frontendOrder values
+
+        BackendOrder backendOrder = mapToBackend(order);
+        System.out.println("Backend Order: " + backendOrder); // Print backendOrder values
+
+        orderService.save(backendOrder);
+        productInShoppingCartController.saveProducts(backendOrder, order);
+
+        return ResponseEntity.ok(order);
+    }
+
+
+    private BackendOrder mapToBackend(FrontendOrder frontendOrder) {
+        return new BackendOrder(frontendOrder.getId(), frontendOrder.getName(), frontendOrder.getCustomer());
+    }
+
+    private FrontendOrder mapToFrontend(BackendOrder backendOrder){
+        String id = backendOrder.getId();
+        String name = backendOrder.getName();
+        String customer = backendOrder.getCustomer();
+        ProductInShoppingCart[] products;
+
+        products = findProductsByOrder(id);
+
+        return new FrontendOrder(id, name, customer, products);
+    }
+
+    private ProductInShoppingCart[] findProductsByOrder(String id){
+        return this.productInShoppingCartController.getProductsByOrderId(id);
     }
 }
