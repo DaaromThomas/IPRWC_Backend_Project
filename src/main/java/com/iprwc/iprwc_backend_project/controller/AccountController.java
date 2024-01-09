@@ -47,6 +47,19 @@ public class AccountController {
         }
     }
 
+    public Account getById(String id){
+        if (this.accountService.findById(id).isPresent()){
+            return this.accountService.findById(id).get();
+        } else {
+            return null;
+        }
+
+    }
+
+    public boolean checkIfAccountExists(String id){
+        return this.accountService.findById(id).isPresent();
+    }
+
     @PostMapping("/create-account")
     public ResponseEntity<Account> createAccount(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");

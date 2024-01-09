@@ -12,11 +12,20 @@ public class FrontendOrder {
 
     private ProductInShoppingCart[] products;
 
-    public FrontendOrder(String id, String name, String customer, ProductInShoppingCart[] products) {
+    private String customerName;
+
+    private String email;
+
+    private String address;
+
+    public FrontendOrder(String id, String name, String customer, ProductInShoppingCart[] products, String customerName, String email, String address) {
         this.id = id;
         this.name = name;
         this.customer = customer;
         this.products = products;
+        this.customerName = customerName;
+        this.email = email;
+        this.address = address;
     }
 
     public String getId() {
@@ -49,5 +58,29 @@ public class FrontendOrder {
 
     public void setProducts(ProductInShoppingCart[] products) {
         this.products = products;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

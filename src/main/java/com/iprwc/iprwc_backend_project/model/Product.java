@@ -16,11 +16,11 @@ public class Product
     private Double cost;
 
     @Column(name = "image_data")
-    private byte[] imageData;
+    private String imageData;
 
     // Constructors, getters, and setters
 
-    public Product(String id, String name, Double cost, byte[] imageData) {
+    public Product(String id, String name, Double cost, String imageData) {
         this.id = id;
         this.name = name;
         this.cost = cost;
@@ -45,11 +45,11 @@ public class Product
         return id;
     }
 
-    public byte[] getImageData() {
+    public String getImageData() {
         return imageData;
     }
 
-    public void setImageData(byte[] imageData) {
+    public void setImageData(String imageData) {
         this.imageData = imageData;
     }
 

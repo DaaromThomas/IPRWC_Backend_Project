@@ -12,14 +12,23 @@ public class BackendOrder {
     private String name;
     private String customer;
 
+    private String customerName;
+
+    private String email;
+
+    private String address;
+
     public BackendOrder() {
         // Default constructor required by JPA
     }
 
-    public BackendOrder(String id, String name, String customer) {
+    public BackendOrder(String id, String name, String customer, String customerName, String email, String address) {
         this.id = id;
         this.name = name;
         this.customer = customer;
+        this.customerName = customerName;
+        this.email = email;
+        this.address = address;
     }
 
     public String getId() {
@@ -44,5 +53,29 @@ public class BackendOrder {
 
     public void setCustomer(String customer) {
         this.customer = customer;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

@@ -1,8 +1,12 @@
 package com.iprwc.iprwc_backend_project.controller;
 
+import com.iprwc.iprwc_backend_project.model.Account;
 import com.iprwc.iprwc_backend_project.model.Product;
+import com.iprwc.iprwc_backend_project.model.RoleType;
 import com.iprwc.iprwc_backend_project.service.ProductService;
 import com.iprwc.iprwc_backend_project.service.ProductServiceImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,10 +16,11 @@ import java.util.List;
 public class ProductController
 {
     private final ProductService productService;
+    private final AccountController accountController;
 
-    public ProductController(ProductService productService)
-    {
+    public ProductController(ProductService productService, AccountController accountController) {
         this.productService = productService;
+        this.accountController = accountController;
     }
 
     @GetMapping("/products")
@@ -45,23 +50,59 @@ public class ProductController
     }
 
     @PostMapping("/products")
-    public Product saveProduct(@RequestBody Product product)
+    public Product saveProduct(@RequestBody Product product, @RequestHeader(name = "X-Account-Id", required = false) String accountId)
     {
-        System.out.println(product);
-        return productService.save(product);
+        if (accountId == null) {
+            System.out.println("No id was delivered");
+            return null;
+        }
+
+        Account account;
+        if (!this.accountController.checkIfAccountExists(accountId)) {
+            System.out.println("Account does not exist");
+            return null;
+        }else {
+            account = this.accountController.getById(accountId);
+        }
+
+        RoleType role = account.getRole();
+        if (role.equals(RoleType.Admin)){
+            return productService.save(product);
+        } else {
+            return null;
+        }
     }
 
     @DeleteMapping("products/{id}")
-    public Product deleteAccount(@PathVariable String id)
+    public Product deleteProduct(@PathVariable String id, @RequestHeader(name = "X-Account-Id", required = false) String accountId)
     {
-        if (productService.findById(id).isPresent())
-        {
-            Product product = productService.findById(id).get();
-            productService.delete(product);
-            return product;
-        }else {
+        if (accountId == null) {
+            System.out.println("No id was delivered");
             return null;
         }
+
+        Account account;
+        if (!this.accountController.checkIfAccountExists(accountId)) {
+            System.out.println("Account does not exist");
+            return null;
+        }else {
+            account = this.accountController.getById(accountId);
+        }
+
+        RoleType role = account.getRole();
+        if (role.equals(RoleType.Admin)){
+            if (productService.findById(id).isPresent())
+            {
+                Product product = productService.findById(id).get();
+                productService.delete(product);
+                return product;
+            }else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+
 
     }
 
