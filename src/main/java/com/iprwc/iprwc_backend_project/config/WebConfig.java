@@ -10,13 +10,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200") // Hier kun je meerdere origins toevoegen als nodig.
+                .allowedOrigins("angularvps.web.app") // Hier kun je meerdere origins toevoegen als nodig.
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // Als voorbeeld
                 .allowCredentials(true);
 
 
         registry.addMapping("/accounts/**")
-                .allowedOrigins("http://localhost:4200")
+                .allowedOrigins("angularvps.web.app")
                 .allowedMethods("GET", "POST")
                 .allowCredentials(true);
 

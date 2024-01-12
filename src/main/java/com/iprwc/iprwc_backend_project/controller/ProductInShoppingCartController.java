@@ -30,8 +30,6 @@ public class ProductInShoppingCartController
     public ProductInShoppingCart[] getProductsByOrderId(String orderId) {
         List<ProductInShoppingCart> productsInShoppingCart = this.productInShoppingCartService.findByOrderId(orderId);
 
-        // Create an array of ProductInShoppingCart and use toArray(T[] a) method
-
         return productsInShoppingCart.toArray(new ProductInShoppingCart[0]);
     }
 

@@ -16,11 +16,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class AccountController {
 
     private final AccountService accountService;
-
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
@@ -39,7 +38,6 @@ public class AccountController {
             if (hashedEnteredPassword.equals(account.getPassword())) {
                 return ResponseEntity.status(HttpStatus.OK).body(account);
             } else {
-                System.out.println("Mag niet");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
         } else {
@@ -56,9 +54,7 @@ public class AccountController {
 
     }
 
-    public boolean checkIfAccountExists(String id){
-        return this.accountService.findById(id).isPresent();
-    }
+
 
     @PostMapping("/create-account")
     public ResponseEntity<Account> createAccount(@RequestBody Map<String, String> credentials) {
@@ -80,7 +76,6 @@ public class AccountController {
     }
 
     private String generateRandomSalt() {
-        // Generate a random 16-character salt
         SecureRandom random = new SecureRandom();
         byte[] saltBytes = new byte[16];
         random.nextBytes(saltBytes);
@@ -94,11 +89,9 @@ public class AccountController {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = messageDigest.digest(saltedPassword.getBytes(StandardCharsets.UTF_8));
 
-            // Convert the byte array to a base64-encoded string
             return Base64.getEncoder().encodeToString(hashedBytes);
-        } catch (NoSuchAlgorithmException e) {
-            // Handle the exception, e.g., log it or throw a custom exception
-            throw new RuntimeException("Error hashing password.", e);
+        } catch (NoSuchAlgorithmException stacktrace) {
+            throw new RuntimeException("Error hashing password", stacktrace);
         }
     }
 }
